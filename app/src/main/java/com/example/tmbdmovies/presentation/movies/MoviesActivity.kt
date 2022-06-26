@@ -3,38 +3,44 @@ package com.example.tmbdmovies.presentation.movies
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import com.example.tmbdmovies.R
 import com.example.tmbdmovies.databinding.ActivityMoviesBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MoviesActivity : AppCompatActivity() {
 
-    val viewModel: MoviesViewModel by viewModels()
-    lateinit var adapter: MoviesPagerAdapter
     lateinit var binding: ActivityMoviesBinding
+    var popularFragment: BaseMoviesFragment = PopularFragment()
+    var tvSeriesFragment: BaseMoviesFragment = TvSeriesFragment()
+    var topRatedFragment: BaseMoviesFragment = TopRatedFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMoviesBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        adapter = MoviesPagerAdapter() {
+        initBottomNavigationMenu()
+    }
 
-        }
+    private fun initBottomNavigationMenu() {
 
-        binding.apply {
-            moviesRv.setHasFixedSize(true)
-            moviesRv.layoutManager = LinearLayoutManager(this@MoviesActivity)
-            moviesRv.adapter = adapter
-        }
-        // todo compare this with lifecycleScope.launch {
-        //            repeatOnLifecycle(Lifecycle.State.STARTED) {
-        lifecycleScope.launchWhenStarted {
-            viewModel.upcomingMovies.collect {
-                adapter.submitData(it)
+        binding.bottomNavigation.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.popular -> replaceFragment(popularFragment)
+                R.id.tv -> replaceFragment(tvSeriesFragment)
+                R.id.top_rated -> replaceFragment(topRatedFragment)
             }
+            true
         }
+
+        binding.bottomNavigation.selectedItemId = R.id.popular
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.nav_host_container, fragment).commit()
     }
 }

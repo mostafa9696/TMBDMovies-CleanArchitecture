@@ -5,11 +5,11 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tmbdmovies.data.models.Movie
 import com.example.tmbdmovies.databinding.ItemMovieBinding
+import com.example.tmbdmovies.presentation.model.MoviePresentation
 
-class MoviesPagerAdapter(var onMovieClick: (movie: Movie) -> Unit) :
-    PagingDataAdapter<Movie, MoviesPagerAdapter.ViewHolder>(diffUtil) {
+class MoviesPagerAdapter(var onMovieClick: (movie: MoviePresentation) -> Unit) :
+    PagingDataAdapter<MoviePresentation, MoviesPagerAdapter.ViewHolder>(diffUtil) {
 
     lateinit var binding: ItemMovieBinding
 
@@ -24,12 +24,12 @@ class MoviesPagerAdapter(var onMovieClick: (movie: Movie) -> Unit) :
             }
         }
 
-        fun bind(currentMovie: Movie) {
+        fun bind(currentMovie: MoviePresentation) {
             binding.apply {
                 /* val posterUrl = "https://image.tmdb.org/t/p/w500" + currentMovie.poster_path
                  Glide.with(itemView).load(posterUrl)
                      .transition(DrawableTransitionOptions.withCrossFade()).into(moviePoster)*/
-                text.text = currentMovie.original_title
+                text.text = currentMovie.title
             }
         }
     }
@@ -54,11 +54,11 @@ class MoviesPagerAdapter(var onMovieClick: (movie: Movie) -> Unit) :
         val diffUtil: DiffUtilCallBack = DiffUtilCallBack()
     }
 
-    class DiffUtilCallBack : DiffUtil.ItemCallback<Movie>() {
-        override fun areItemsTheSame(oldItem: Movie, newItem: Movie) =
+    class DiffUtilCallBack : DiffUtil.ItemCallback<MoviePresentation>() {
+        override fun areItemsTheSame(oldItem: MoviePresentation, newItem: MoviePresentation) =
             oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Movie, newItem: Movie) =
+        override fun areContentsTheSame(oldItem: MoviePresentation, newItem: MoviePresentation) =
             oldItem == newItem
 
     }

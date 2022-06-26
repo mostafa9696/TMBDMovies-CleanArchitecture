@@ -1,8 +1,8 @@
 package com.example.tmbdmovies.data.network
 
-import com.example.tmbdmovies.data.models.Movie
-import com.example.tmbdmovies.data.models.MovieCastResponse
 import com.example.tmbdmovies.data.models.MovieResponse
+import com.example.tmbdmovies.data.models.MovieCastResponse
+import com.example.tmbdmovies.data.models.MoviesResponse
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
@@ -11,27 +11,31 @@ import retrofit2.http.Query
 interface ApisService {
 
     companion object {
-        const val ACCESS_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYzUxYjEyZGU1YWNjMjQ3ZWE5YjJmOTI2ZGEyNzFmNiIsInN1YiI6IjVmZGRmM2I3YjBiYTdlMDA0MDllYTViMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O1SGsgJ_P2woqZJ0HWlXNtJ81mtjO-kl3ix8K-b_PS8"
+        const val ACCESS_TOKEN =
+            "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYzUxYjEyZGU1YWNjMjQ3ZWE5YjJmOTI2ZGEyNzFmNiIsInN1YiI6IjVmZGRmM2I3YjBiYTdlMDA0MDllYTViMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O1SGsgJ_P2woqZJ0HWlXNtJ81mtjO-kl3ix8K-b_PS8"
     }
-    @GET("movie/popular")
-    suspend fun getPopularMovies(
-        @Query("api_key") api_key: String,
-        @Query("page") page: Int,
-    ): MovieResponse
-
-    @GET("movie/top_rated")
-    suspend fun getTopRatedMovies(
-        @Query("api_key") api_key: String,
-        @Query("page") page: Int
-    ): MovieResponse
 
     @Headers("Authorization: Bearer $ACCESS_TOKEN")
-    @GET("movie/upcoming")
-    suspend fun getUpcomingMovies(
+    @GET("movie/popular")
+    suspend fun getPopularMovies(
+        @Query("page") page: Int,
+        //  @Query("api_key") clientId: String = BuildConfig.TMDB_API_KEY
+    ): MoviesResponse
+
+    @Headers("Authorization: Bearer $ACCESS_TOKEN")
+    @GET("tv/popular")
+    suspend fun getTvShows(
         @Query("page")
         page: Int
-    ): MovieResponse
+    ): MoviesResponse
 
+
+    @Headers("Authorization: Bearer $ACCESS_TOKEN")
+    @GET("movie/top_rated")
+    suspend fun getTopRatedMovies(
+        @Query("page")
+        page: Int
+    ): MoviesResponse
 
     @GET("movie/{movie_id}")
     suspend fun getMovieDetails(
@@ -40,7 +44,7 @@ interface ApisService {
         movieId: Long,
         @Query("append_to_response")
         appendToResponse: String
-    ): Movie
+    ): MovieResponse
 
     @GET("movie/{movie_id}/credits")
     suspend fun getMovieCast(
@@ -54,6 +58,6 @@ interface ApisService {
         @Query("api_key") api_key: String,
         @Query("query") query: String,
         @Query("page") page: Int
-    ): MovieResponse
+    ): MoviesResponse
 
 }

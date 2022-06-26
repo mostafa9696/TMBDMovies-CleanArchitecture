@@ -3,7 +3,8 @@ package com.example.tmbdmovies.data
 import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.tmbdmovies.data.models.Movie
+import com.example.tmbdmovies.data.models.MovieResponse
+import com.example.tmbdmovies.domain.models.Movie
 import com.example.tmbdmovies.domain.repository.MoviesRepository
 
 class MoviesPagingSource(
@@ -19,8 +20,8 @@ class MoviesPagingSource(
         return try {
             when (query) {
 
-                TOP_RATED -> {
-                    val popularMovies = moviesRepository.getTopRatedMovies(page)
+                TV_SERIES -> {
+                    val popularMovies = moviesRepository.getTvSeries(page)
                     LoadResult.Page(
                         data = popularMovies,
                         prevKey = null,
@@ -35,8 +36,8 @@ class MoviesPagingSource(
                         nextKey = if (popularMovies.isEmpty()) null else page + 1
                     )
                 }
-                UPCOMING -> {
-                    val popularMovies = moviesRepository.getUpcomingMovies(page)
+                TOP_RATED -> {
+                    val popularMovies = moviesRepository.getTopRatedMovies(page)
                     LoadResult.Page(
                         data = popularMovies,
                         prevKey = null,
@@ -67,7 +68,7 @@ class MoviesPagingSource(
 
     companion object {
         const val POPULAR = "popular"
+        const val TV_SERIES = "series"
         const val TOP_RATED = "top_rated"
-        const val UPCOMING = "upcoming"
     }
 }
