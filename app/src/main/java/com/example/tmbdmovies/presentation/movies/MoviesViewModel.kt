@@ -10,7 +10,10 @@ import com.example.tmbdmovies.domain.models.Movie
 import com.example.tmbdmovies.domain.usecases.GetMoviesUseCase
 import com.example.tmbdmovies.presentation.model.MoviePresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,8 +22,10 @@ class MoviesViewModel @Inject constructor(
     private val mapper: Mapper<Movie, MoviePresentation>
 ) : ViewModel() {
 
+    //private val requestStateFlow = MutableSharedFlow<String>()
     private val requestStateFlow = MutableStateFlow<String?>(null)
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     var movies: Flow<PagingData<MoviePresentation>> = requestStateFlow
        //.debounce(300)
         .filterNotNull()
@@ -42,5 +47,8 @@ class MoviesViewModel @Inject constructor(
 
         //upcomingMovies = getMoviesUseCase(query).cachedIn(viewModelScope)
         requestStateFlow.value = query
+      /*  viewModelScope.launch {
+            requestStateFlow.emit(query)
+        }*/
     }
 }

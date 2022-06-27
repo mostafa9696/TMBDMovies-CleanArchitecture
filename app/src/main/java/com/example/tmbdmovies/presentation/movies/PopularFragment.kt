@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmbdmovies.data.MoviesPagingSource.Companion.POPULAR
 import com.example.tmbdmovies.databinding.FragmentPopularBinding
@@ -21,4 +22,7 @@ class PopularFragment : BaseMoviesFragment(POPULAR) {
     }
 
     override fun getMoviesRv(): RecyclerView = binding.moviesRv
+
+    override fun getProgressLoading(): ProgressBar = binding.progressbar
+
 }

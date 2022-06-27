@@ -15,11 +15,9 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 abstract class AppModule {
 
-
     @Binds
     abstract fun bindMovieRemoteMapper(movieRemoteMapper: MovieRemoteMapper): Mapper<MovieResponse, Movie>
 
     @Binds
     abstract fun bindMovieDomainMapper(movieDomainMapper: MovieDomainMapper): Mapper<Movie, MoviePresentation>
-
 }

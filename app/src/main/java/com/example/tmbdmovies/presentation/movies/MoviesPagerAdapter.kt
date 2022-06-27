@@ -5,6 +5,9 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.example.tmbdmovies.data.Constants
 import com.example.tmbdmovies.databinding.ItemMovieBinding
 import com.example.tmbdmovies.presentation.model.MoviePresentation
 
@@ -26,10 +29,11 @@ class MoviesPagerAdapter(var onMovieClick: (movie: MoviePresentation) -> Unit) :
 
         fun bind(currentMovie: MoviePresentation) {
             binding.apply {
-                /* val posterUrl = "https://image.tmdb.org/t/p/w500" + currentMovie.poster_path
-                 Glide.with(itemView).load(posterUrl)
-                     .transition(DrawableTransitionOptions.withCrossFade()).into(moviePoster)*/
-                text.text = currentMovie.title
+                val posterUrl = Constants.base_img_url + currentMovie.posterPath
+                Glide.with(itemView).load(posterUrl)
+                    .transition(DrawableTransitionOptions.withCrossFade()).into(moviePosterIv)
+                movieNameTv.text = currentMovie.title
+                ratingTv.text = currentMovie.voteAverage.toString()
             }
         }
     }
