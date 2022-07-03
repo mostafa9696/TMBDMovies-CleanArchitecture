@@ -7,7 +7,7 @@ data class MoviesResponse(
 data class MovieResponse(
     val adult: Boolean? = null,
     val backdrop_path: String? = null,
-    val genres: List<GenreList>? = null,
+    val genre_ids: List<Int>? = null,
     val id: Long? = null,
     val original_title: String? = null, // for movie case
     val original_name: String? = null, // for series case
@@ -15,13 +15,8 @@ data class MovieResponse(
     val poster_path: String? = null,
     val release_date: String? = null,
     val vote_average: Double? = null,
-    val status: String? = null,
-    val videos: VideoResult? = null
+    val videos: VideoResult? = null,
 ) {
-    data class GenreList(
-        val id: Int,
-        val name: String
-    )
 
     data class VideoResult(
         val results: List<Result>

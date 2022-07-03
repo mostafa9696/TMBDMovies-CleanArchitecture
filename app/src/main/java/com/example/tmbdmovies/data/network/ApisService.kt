@@ -1,63 +1,59 @@
 package com.example.tmbdmovies.data.network
 
-import com.example.tmbdmovies.data.models.MovieResponse
-import com.example.tmbdmovies.data.models.MovieCastResponse
-import com.example.tmbdmovies.data.models.MoviesResponse
+import com.example.tmbdmovies.BuildConfig
+import com.example.tmbdmovies.data.models.*
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApisService {
 
-    companion object {
-        const val ACCESS_TOKEN =
-            "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhYzUxYjEyZGU1YWNjMjQ3ZWE5YjJmOTI2ZGEyNzFmNiIsInN1YiI6IjVmZGRmM2I3YjBiYTdlMDA0MDllYTViMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.O1SGsgJ_P2woqZJ0HWlXNtJ81mtjO-kl3ix8K-b_PS8"
-    }
-
-    @Headers("Authorization: Bearer $ACCESS_TOKEN")
     @GET("movie/popular")
     suspend fun getPopularMovies(
         @Query("page") page: Int,
-        //  @Query("api_key") clientId: String = BuildConfig.TMDB_API_KEY
+        @Query("api_key") clientId: String = BuildConfig.TMDB_API_KEY
     ): MoviesResponse
 
-    @Headers("Authorization: Bearer $ACCESS_TOKEN")
     @GET("tv/popular")
     suspend fun getTvShows(
         @Query("page")
-        page: Int
+        page: Int,
+        @Query("api_key") clientId: String = BuildConfig.TMDB_API_KEY
     ): MoviesResponse
 
 
-    @Headers("Authorization: Bearer $ACCESS_TOKEN")
     @GET("movie/top_rated")
     suspend fun getTopRatedMovies(
         @Query("page")
-        page: Int
+        page: Int,
+        @Query("api_key") clientId: String = BuildConfig.TMDB_API_KEY
     ): MoviesResponse
 
-    @GET("movie/{movie_id}")
-    suspend fun getMovieDetails(
-        @Query("api_key") api_key: String,
+
+    @GET("movie/{movie_id}/videos")
+    suspend fun getMovieTrailers(
         @Path("movie_id")
         movieId: Long,
-        @Query("append_to_response")
-        appendToResponse: String
-    ): MovieResponse
+        @Query("api_key") api_key: String = BuildConfig.TMDB_API_KEY
+        ): MovieTrailersResponse
+
+    @GET("genre/movie/list")
+    suspend fun getMovieGenres(
+        @Query("api_key") api_key: String = BuildConfig.TMDB_API_KEY
+    ): MovieGenresResponse
 
     @GET("movie/{movie_id}/credits")
     suspend fun getMovieCast(
-        @Query("api_key") api_key: String,
         @Path("movie_id") movieId: Long,
-    ): MovieCastResponse
+        @Query("api_key") clientId: String = BuildConfig.TMDB_API_KEY
+    ): MovieCastsResponse
 
 
     @GET("search/movie")
     suspend fun searchMovie(
-        @Query("api_key") api_key: String,
         @Query("query") query: String,
-        @Query("page") page: Int
+        @Query("page") page: Int,
+        @Query("api_key") clientId: String = BuildConfig.TMDB_API_KEY
     ): MoviesResponse
 
 }

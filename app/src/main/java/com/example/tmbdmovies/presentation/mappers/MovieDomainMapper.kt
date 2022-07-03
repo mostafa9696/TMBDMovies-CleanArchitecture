@@ -13,10 +13,11 @@ class MovieDomainMapper @Inject constructor() : Mapper<Movie, MoviePresentation>
 
     override fun to(t: Movie): MoviePresentation {
         return MoviePresentation(
-            genres = t.genres,
+            genreIds = t.genreIds,
             id = t.id,
             title = t.title,
             posterPath = t.posterPath,
+            backdropPath = t.backdropPath,
             overview = t.overview,
             releaseDate = t.releaseDate,
             voteAverage = t.voteAverage,

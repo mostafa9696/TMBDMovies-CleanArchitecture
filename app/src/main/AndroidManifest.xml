@@ -13,9 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TMBDMovies">
         <activity
+            android:name=".presentation.details.MovieDetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".presentation.movies.MoviesActivity"
-            android:exported="true"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

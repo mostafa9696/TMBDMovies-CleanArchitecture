@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmbdmovies.presentation.MoviesLoadStateAdapter
+import com.example.tmbdmovies.presentation.details.MovieDetailsActivity
 import com.example.tmbdmovies.presentation.extensions.hide
 import com.example.tmbdmovies.presentation.extensions.onStates
 import com.example.tmbdmovies.presentation.extensions.show
@@ -50,7 +51,7 @@ abstract class BaseMoviesFragment(private val query: String) : Fragment() {
     private fun initMoviesRv() {
 
         adapter = MoviesPagerAdapter() {
-
+            MovieDetailsActivity.start(requireContext(), it)
         }
 
         val gridLayoutManager = GridLayoutManager(context, 2)

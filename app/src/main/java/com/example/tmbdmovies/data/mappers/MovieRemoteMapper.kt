@@ -13,10 +13,11 @@ class MovieRemoteMapper @Inject constructor(): Mapper<MovieResponse, Movie> {
 
     override fun to(t: MovieResponse): Movie {
         return Movie(
-            genres = t.genres?.map { it.name },
+            genreIds = t.genre_ids,
             id = t.id,
             title = t.original_title ?: t.original_name,
             posterPath = t.poster_path,
+            backdropPath = t.backdrop_path,
             overview = t.overview,
             releaseDate = t.release_date,
             voteAverage = t.vote_average,
