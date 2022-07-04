@@ -1,6 +1,8 @@
 package com.example.tmbdmovies.di
 
+import com.example.tmbdmovies.data.repository.DetailsRepositoryImp
 import com.example.tmbdmovies.data.repository.MoviesRepositoryImp
+import com.example.tmbdmovies.domain.repository.DetailsRepository
 import com.example.tmbdmovies.domain.repository.MoviesRepository
 import dagger.Binds
 import dagger.Module
@@ -13,5 +15,8 @@ abstract class DataModule {
 
     @Binds
     abstract fun bindMovieRepository(moviesRepositoryImp: MoviesRepositoryImp): MoviesRepository
+
+    @Binds
+    abstract fun bindDetailsRepository(detailsRepository: DetailsRepositoryImp): DetailsRepository
 
 }

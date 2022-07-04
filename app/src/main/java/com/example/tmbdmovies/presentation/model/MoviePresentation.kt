@@ -16,5 +16,6 @@ data class MoviePresentation(
     val videos: List<String>? = null,
     var movieCast: List<MovieCastPresentation>? = null,
     var movieTrailers: List<MovieTrailerPresentation>? = null,
-    var movieGenres: List<String>? = null
+    var movieGenres: List<String>? = null,
+    var type: String = ""
 ): Parcelable

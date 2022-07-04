@@ -51,6 +51,7 @@ abstract class BaseMoviesFragment(private val query: String) : Fragment() {
     private fun initMoviesRv() {
 
         adapter = MoviesPagerAdapter() {
+            it.type = query
             MovieDetailsActivity.start(requireContext(), it)
         }
 
