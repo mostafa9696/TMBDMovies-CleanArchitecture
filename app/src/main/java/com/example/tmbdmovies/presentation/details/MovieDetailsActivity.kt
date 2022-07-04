@@ -101,10 +101,12 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private fun setMovieGenres(movieGenres: List<String>?) {
         movieGenres?.forEach {
-            val genreBinding = ItemMovieGenreBinding.inflate(layoutInflater)
-            val genrechip = genreBinding.root
-            genrechip.text = it
-            binding.genreChipGroup.addView(genrechip)
+            if (it.isNotBlank()) {
+                val genreBinding = ItemMovieGenreBinding.inflate(layoutInflater)
+                val genrechip = genreBinding.root
+                genrechip.text = it
+                binding.genreChipGroup.addView(genrechip)
+            }
         }
     }
 
