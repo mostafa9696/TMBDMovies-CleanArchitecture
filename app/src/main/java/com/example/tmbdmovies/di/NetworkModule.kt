@@ -1,11 +1,14 @@
 package com.example.tmbdmovies.di
 
+import com.example.tmbdmovies.common.NetworkConnectivityHelper
 import com.example.tmbdmovies.data.Constants
-import com.example.tmbdmovies.data.network.ApisService
+import com.example.tmbdmovies.data.remote.ApisService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -24,8 +27,9 @@ class NetworkModule {
             level = HttpLoggingInterceptor.Level.BODY
         }
         return OkHttpClient.Builder()
-            .connectTimeout(60L, TimeUnit.SECONDS)
-            .readTimeout(60L, TimeUnit.SECONDS)
+            .connectTimeout(10L, TimeUnit.SECONDS)
+            .readTimeout(10L, TimeUnit.SECONDS)
+            .callTimeout(10L, TimeUnit.SECONDS)
             .addInterceptor(httpLoggingInterceptor)
             .build()
     }
@@ -44,5 +48,15 @@ class NetworkModule {
     @Singleton
     fun providesApiService(retrofit: Retrofit): ApisService {
         return retrofit.create(ApisService::class.java)
+    }
+
+    @Provides
+    fun provideNetworkHelper(): NetworkConnectivityHelper {
+        return NetworkConnectivityHelper()
+    }
+
+    @Provides
+    fun provideDispatcher(): CoroutineDispatcher {
+        return Dispatchers.IO
     }
 }

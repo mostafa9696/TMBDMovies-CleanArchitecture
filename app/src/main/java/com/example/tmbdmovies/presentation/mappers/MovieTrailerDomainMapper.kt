@@ -8,13 +8,13 @@ import com.example.tmbdmovies.presentation.model.MovieGenrePresentation
 import com.example.tmbdmovies.presentation.model.MovieTrailerPresentation
 import javax.inject.Inject
 
-class MovieTrailerDomainMapper @Inject constructor() : Mapper<MovieTrailer, MovieTrailerPresentation> {
+class MovieTrailerDomainMapper @Inject constructor() : Mapper<MovieTrailerResponse, MovieTrailerPresentation> {
 
-    override fun from(e: MovieTrailerPresentation): MovieTrailer {
+    override fun from(e: MovieTrailerPresentation): MovieTrailerResponse {
         throw Exception("Not supported")
     }
 
-    override fun to(t: MovieTrailer): MovieTrailerPresentation {
+    override fun to(t: MovieTrailerResponse): MovieTrailerPresentation {
         return MovieTrailerPresentation(
             key = t.key,
             name = t.name,

@@ -4,19 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tmbdmovies.common.Mapper
 import com.example.tmbdmovies.common.Resource
-import com.example.tmbdmovies.domain.models.MovieCast
-import com.example.tmbdmovies.domain.models.MovieGenre
-import com.example.tmbdmovies.domain.models.MovieTrailer
+import com.example.tmbdmovies.data.models.MovieCastResponse
+import com.example.tmbdmovies.data.models.MovieGenreResponse
+import com.example.tmbdmovies.data.models.MovieTrailerResponse
 import com.example.tmbdmovies.domain.usecases.GetMovieCastUseCase
 import com.example.tmbdmovies.domain.usecases.GetMovieGenresUseCase
 import com.example.tmbdmovies.domain.usecases.GetMovieTrailersUseCase
 import com.example.tmbdmovies.presentation.model.MovieCastPresentation
-import com.example.tmbdmovies.presentation.model.MovieGenrePresentation
-import com.example.tmbdmovies.presentation.model.MoviePresentation
 import com.example.tmbdmovies.presentation.model.MovieTrailerPresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -27,59 +23,80 @@ class MovieDetailsViewModel @Inject constructor(
     private val getMovieCastUseCase: GetMovieCastUseCase,
     private val getMovieTrailersUseCase: GetMovieTrailersUseCase,
     private val getMovieGenresUseCase: GetMovieGenresUseCase,
-    private val movieCastMapper: Mapper<MovieCast, MovieCastPresentation>,
-    private val movieTrailerMapper: Mapper<MovieTrailer, MovieTrailerPresentation>,
-    private val movieGenreMapper: Mapper<MovieGenre, MovieGenrePresentation>
+    private val movieCastMapper: Mapper<MovieCastResponse, MovieCastPresentation>,
+    private val movieTrailerMapper: Mapper<MovieTrailerResponse, MovieTrailerPresentation>
 ) : ViewModel() {
 
 
     private val _movieCastStateFlow =
-        MutableStateFlow<Resource<MoviePresentation?>>(Resource.Loading)
-
-    val movieCastStateFlow: StateFlow<Resource<MoviePresentation?>> =
+        MutableStateFlow<Resource<List<MovieCastPresentation>>>(Resource.Loading)
+    val movieCastStateFlow: StateFlow<Resource<List<MovieCastPresentation>>> =
         _movieCastStateFlow
 
-    private val exceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
-        // liveData.postValue(ViewState.Error(throwable))
+    private val _movieGenreStateFlow =
+        MutableStateFlow<Resource<List<String>>>(Resource.Loading)
+    val movieGenreStateFlow: StateFlow<Resource<List<String>>> =
+        _movieGenreStateFlow
+
+    private val _movieTrailersStateFlow =
+        MutableStateFlow<Resource<List<MovieTrailerPresentation>>>(Resource.Loading)
+    val movieTrailersStateFlow: StateFlow<Resource<List<MovieTrailerPresentation>>> =
+        _movieTrailersStateFlow
+
+
+    fun getMovieCast(movieID: Long, type: String) {
         viewModelScope.launch {
-            _movieCastStateFlow.emit(Resource.Error(throwable))
+            getMovieCastUseCase(movieID, type).collect {
+                when (it) {
+                    is Resource.Loading -> _movieCastStateFlow.emit(Resource.Loading)
+                    is Resource.Error -> _movieCastStateFlow.emit(Resource.Error(it.exception))
+                    is Resource.Success -> _movieCastStateFlow.emit(
+                        Resource.Success
+                            (it.data?.cast?.map { castResponse ->
+                            movieCastMapper.to(castResponse)
+                        })
+                    )
+                }
+            }
         }
     }
 
-    fun getMovieInfo(moviePresentation: MoviePresentation) {
-        // if we handle exception with only try&catch, the app will crash
-        // because the crash happened in lunch or async scope and no Exception handler exist
-        // so we will replace try,catch with CoroutineExceptionHandler
-        viewModelScope.launch(exceptionHandler) {
-            //   try {
-            val cast = async {
-                getMovieCastUseCase(moviePresentation.id!!, moviePresentation.type).map {
-                    movieCastMapper.to(it)
+    fun getMovieTrailers(movieID: Long, type: String) {
+        viewModelScope.launch {
+            getMovieTrailersUseCase(movieID, type).collect {
+                when (it) {
+                    is Resource.Loading -> _movieTrailersStateFlow.emit(Resource.Loading)
+                    is Resource.Error -> _movieTrailersStateFlow.emit(Resource.Error(it.exception))
+                    is Resource.Success -> _movieTrailersStateFlow.emit(
+                        Resource.Success
+                            (it.data?.results?.map { trailerResponse ->
+                            movieTrailerMapper.to(trailerResponse)
+                        })
+                    )
                 }
             }
-            val trailers = async {
-                getMovieTrailersUseCase(moviePresentation.id!!, moviePresentation.type).map {
-                    movieTrailerMapper.to(it)
+        }
+    }
+
+    fun getMovieGenre(movieGenreIDs: List<Int>?) {
+        viewModelScope.launch {
+            getMovieGenresUseCase().collect {
+                when (it) {
+                    is Resource.Loading -> _movieGenreStateFlow.emit(Resource.Loading)
+                    is Resource.Error -> _movieGenreStateFlow.emit(Resource.Error(it.exception))
+                    is Resource.Success -> {
+                        val movieGenres = getMovieGenres(it.data!!.genres, movieGenreIDs)
+                        _movieGenreStateFlow.emit(
+                            Resource.Success(movieGenres)
+                        )
+                    }
                 }
             }
-            val allGenres = async {
-                getMovieGenresUseCase().map {
-                    movieGenreMapper.to(it)
-                }
-            }
-            moviePresentation.movieCast = cast.await()
-            moviePresentation.movieTrailers = trailers.await()
-            moviePresentation.movieGenres =
-                getMovieGenres(allGenres.await(), moviePresentation.genreIds)
-            _movieCastStateFlow.emit(Resource.Success(moviePresentation))
-            /*    } catch (e: HttpException) {
-                    _movieCastStateFlow.emit(Resource.Error(e))
-                }*/
         }
     }
 
     private fun getMovieGenres(
-        allGenres: List<MovieGenrePresentation>,
+        allGenres: List<MovieGenreResponse>,
         genreIds: List<Int>?
     ): List<String> {
         val movieGenres = mutableListOf<String>()

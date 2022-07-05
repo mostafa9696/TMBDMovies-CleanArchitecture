@@ -24,6 +24,7 @@ import com.example.tmbdmovies.presentation.model.MovieCastPresentation
 import com.example.tmbdmovies.presentation.model.MoviePresentation
 import com.example.tmbdmovies.presentation.model.MovieTrailerPresentation
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -46,24 +47,60 @@ class MovieDetailsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         moviePresentation = intent.getParcelableExtra(MOVIE_EXTRA)!!
-        viewModel.getMovieInfo(moviePresentation)
+        setMovieDataViews(moviePresentation)
+        getMovieInfo()
 
         observeOnMovieCast()
+    }
+
+    private fun getMovieInfo() {
+        viewModel.getMovieCast(moviePresentation.id!!, moviePresentation.type)
+        viewModel.getMovieTrailers(moviePresentation.id!!, moviePresentation.type)
+        viewModel.getMovieGenre(moviePresentation.genreIds)
     }
 
     private fun observeOnMovieCast() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.movieCastStateFlow.collect {
-                    when (it) {
-                        is Resource.Success -> setMovieDataViews(it.data)
-                        is Resource.Error -> Toast.makeText(
-                            this@MovieDetailsActivity,
-                            it.exception.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
 
+                launch {
+                    viewModel.movieCastStateFlow.collect {
+                        when (it) {
+                            is Resource.Success -> setMovieCast(it.data)
+                            is Resource.Error -> Toast.makeText(
+                                this@MovieDetailsActivity,
+                                it.exception.message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
+                }
+
+                launch {
+                    viewModel.movieTrailersStateFlow.collect {
+                        when (it) {
+                            is Resource.Success -> setMovieTrailers(it.data)
+                            is Resource.Error -> Toast.makeText(
+                                this@MovieDetailsActivity,
+                                it.exception.message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+
+                    }
+                }
+
+                launch {
+                    viewModel.movieGenreStateFlow.collect {
+                        when (it) {
+                            is Resource.Success -> setMovieGenres(it.data)
+                            is Resource.Error -> Toast.makeText(
+                                this@MovieDetailsActivity,
+                                it.exception.message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    }
                 }
             }
         }
@@ -71,7 +108,6 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     @SuppressLint("SetTextI18n")
     private fun setMovieDataViews(movie: MoviePresentation?) = with(binding) {
-        binding.progressBar.remove()
         movie?.apply {
             toolbar.title = title
             overViewTv.text = movie.overview
@@ -92,10 +128,6 @@ class MovieDetailsActivity : AppCompatActivity() {
                 .load(Constants.base_img_url + movie.backdropPath)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(movieBackdropPoster)
-
-            setMovieCast(movieCast)
-            setMovieTrailers(movieTrailers)
-            setMovieGenres(movieGenres)
         }
     }
 

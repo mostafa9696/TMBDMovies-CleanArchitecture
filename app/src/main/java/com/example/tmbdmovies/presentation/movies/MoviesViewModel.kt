@@ -6,20 +6,18 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import com.example.tmbdmovies.common.Mapper
-import com.example.tmbdmovies.domain.models.Movie
+import com.example.tmbdmovies.data.models.MovieResponse
 import com.example.tmbdmovies.domain.usecases.GetMoviesUseCase
 import com.example.tmbdmovies.presentation.model.MoviePresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MoviesViewModel @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
-    private val mapper: Mapper<Movie, MoviePresentation>
+    private val mapper: Mapper<MovieResponse, MoviePresentation>
 ) : ViewModel() {
 
     //private val requestStateFlow = MutableSharedFlow<String>()

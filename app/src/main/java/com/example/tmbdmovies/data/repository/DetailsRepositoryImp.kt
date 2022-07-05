@@ -1,46 +1,58 @@
 package com.example.tmbdmovies.data.repository
 
-import com.example.tmbdmovies.common.Mapper
-import com.example.tmbdmovies.data.models.MovieCastResponse
-import com.example.tmbdmovies.data.models.MovieGenreResponse
-import com.example.tmbdmovies.data.models.MovieTrailerResponse
-import com.example.tmbdmovies.data.network.ApisService
-import com.example.tmbdmovies.domain.models.MovieCast
-import com.example.tmbdmovies.domain.models.MovieGenre
-import com.example.tmbdmovies.domain.models.MovieTrailer
+import com.example.tmbdmovies.common.NetworkConnectivityHelper
+import com.example.tmbdmovies.common.Resource
+import com.example.tmbdmovies.data.models.MovieCastsResponse
+import com.example.tmbdmovies.data.models.MovieGenresResponse
+import com.example.tmbdmovies.data.models.MovieTrailersResponse
+import com.example.tmbdmovies.data.remote.MoviesRemoteDateSource
+import com.example.tmbdmovies.domain.repository.BaseRepository
 import com.example.tmbdmovies.domain.repository.DetailsRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class DetailsRepositoryImp @Inject constructor(
-    private val apisService: ApisService,
-    private val movieCastRemoteMapper: Mapper<MovieCastResponse, MovieCast>,
-    private val movieTrailerRemoteMapper: Mapper<MovieTrailerResponse, MovieTrailer>,
-    private val movieGenreRemoteMapper: Mapper<MovieGenreResponse, MovieGenre>
-) : DetailsRepository {
+    private val moviesRemoteDateSource: MoviesRemoteDateSource,
+    networkConnectivityHelper: NetworkConnectivityHelper,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : BaseRepository(networkConnectivityHelper, dispatcher), DetailsRepository {
 
-    override suspend fun getMovieCast(movieId: Long): List<MovieCast> =
-        apisService.getMovieCast(movieId).cast.map {
-            movieCastRemoteMapper.to(it)
-        }
+    override suspend fun getMovieCast(movieId: Long): Flow<Resource<MovieCastsResponse>> =
+        networkFlowOnly(
+            remoteCall = {
+                moviesRemoteDateSource.getMovieCast(movieId)
+            }
+        )
 
-    override suspend fun getMovieTrailers(movieID: Long): List<MovieTrailer> =
-        apisService.getMovieTrailers(movieID).results.map {
-            movieTrailerRemoteMapper.to(it)
-        }
 
-    override suspend fun getTvCast(tvId: Long): List<MovieCast> =
-        apisService.getTvCast(tvId).cast.map {
-            movieCastRemoteMapper.to(it)
-        }
+    override suspend fun getMovieTrailers(movieID: Long): Flow<Resource<MovieTrailersResponse>> =
+        networkFlowOnly(
+            remoteCall = {
+                moviesRemoteDateSource.getMovieTrailers(movieID)
+            }
+        )
 
-    override suspend fun getTvTrailers(tvID: Long): List<MovieTrailer> =
-        apisService.getTvTrailers(tvID).results.map {
-            movieTrailerRemoteMapper.to(it)
-        }
+    override suspend fun getTvCast(tvId: Long): Flow<Resource<MovieCastsResponse>> =
+        networkFlowOnly(
+            remoteCall = {
+                moviesRemoteDateSource.getTvCast(tvId)
+            }
+        )
 
-    override suspend fun getGenres(): List<MovieGenre> =
-        apisService.getMovieGenres().genres.map {
-            movieGenreRemoteMapper.to(it)
-        }
+    override suspend fun getTvTrailers(tvID: Long): Flow<Resource<MovieTrailersResponse>> =
+        networkFlowOnly(
+            remoteCall = {
+                moviesRemoteDateSource.getTvTrailers(tvID)
+            }
+        )
+
+    override suspend fun getGenres(): Flow<Resource<MovieGenresResponse>> =
+        networkFlowOnly(
+            remoteCall = {
+                moviesRemoteDateSource.getGenres()
+            }
+        )
 
 }

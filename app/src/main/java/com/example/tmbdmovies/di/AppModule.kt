@@ -1,10 +1,7 @@
 package com.example.tmbdmovies.di
 
 import com.example.tmbdmovies.common.Mapper
-import com.example.tmbdmovies.data.mappers.MovieCastsRemoteMapper
-import com.example.tmbdmovies.data.mappers.MovieGenresRemoteMapper
-import com.example.tmbdmovies.data.mappers.MovieRemoteMapper
-import com.example.tmbdmovies.data.mappers.MovieTrailerRemoteMapper
+import com.example.tmbdmovies.data.mappers.*
 import com.example.tmbdmovies.data.models.MovieCastResponse
 import com.example.tmbdmovies.data.models.MovieGenreResponse
 import com.example.tmbdmovies.data.models.MovieResponse
@@ -40,17 +37,21 @@ abstract class AppModule {
     abstract fun bindMovieCastRemoteMapper(movieCastsRemoteMapper: MovieCastsRemoteMapper): Mapper<MovieCastResponse, MovieCast>
 
     @Binds
-    abstract fun bindMovieCastDomainMapper(movieCastDomainMapper: MovieCastDomainMapper): Mapper<MovieCast, MovieCastPresentation>
+    abstract fun bindMovieCastDomainMapper(movieCastDomainMapper: MovieCastDomainMapper): Mapper<MovieCastResponse, MovieCastPresentation>
 
     @Binds
     abstract fun bindMovieTrailersRemoteMapper(movieTrailerRemoteMapper: MovieTrailerRemoteMapper): Mapper<MovieTrailerResponse, MovieTrailer>
 
     @Binds
-    abstract fun bindMovieTrailersDomainMapper(movieTrailerDomainMapper: MovieTrailerDomainMapper): Mapper<MovieTrailer, MovieTrailerPresentation>
+    abstract fun bindMovieTrailersDomainMapper(movieTrailerDomainMapper: MovieTrailerDomainMapper): Mapper<MovieTrailerResponse, MovieTrailerPresentation>
 
     @Binds
     abstract fun bindMovieGenresRemoteMapper(movieGenresRemoteMapper: MovieGenresRemoteMapper): Mapper<MovieGenreResponse, MovieGenre>
 
     @Binds
-    abstract fun bindMovieGenresDomainMapper(movieGenreDomainMapper: MovieGenreDomainMapper): Mapper<MovieGenre, MovieGenrePresentation>
+    abstract fun bindMovieGenresDomainMapper(movieGenreDomainMapper: MovieGenreDomainMapper): Mapper<MovieGenreResponse, MovieGenrePresentation>
+
+    @Binds
+    abstract fun bindMapper(movieRemoteMapper2: MovieRemoteMapper2): Mapper<MovieResponse, MoviePresentation>
+
 }

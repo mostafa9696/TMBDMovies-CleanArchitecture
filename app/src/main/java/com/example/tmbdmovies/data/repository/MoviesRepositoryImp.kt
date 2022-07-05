@@ -1,38 +1,34 @@
 package com.example.tmbdmovies.data.repository
 
-import com.example.tmbdmovies.common.Mapper
-import com.example.tmbdmovies.data.models.MovieResponse
-import com.example.tmbdmovies.data.network.ApisService
-import com.example.tmbdmovies.domain.models.Movie
+import com.example.tmbdmovies.common.NetworkConnectivityHelper
+import com.example.tmbdmovies.data.models.MoviesResponse
+import com.example.tmbdmovies.data.remote.MoviesRemoteDateSource
+import com.example.tmbdmovies.domain.repository.BaseRepository
 import com.example.tmbdmovies.domain.repository.MoviesRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import javax.inject.Inject
 
 class MoviesRepositoryImp @Inject constructor(
-    private val apisService: ApisService,
-    private val movieRemoteMapper: Mapper<MovieResponse, Movie>
-) : MoviesRepository {
+    private val moviesRemoteDateSource: MoviesRemoteDateSource,
+    networkConnectivityHelper: NetworkConnectivityHelper,
+    dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : BaseRepository(networkConnectivityHelper, dispatcher), MoviesRepository {
 
-    // todo handle api failure exceptions
-    override suspend fun getPopularMovies(page: Int): List<Movie> =
-        apisService.getPopularMovies(page).results.map {
-            movieRemoteMapper.to(it)
-        }
-
-    override suspend fun getTvSeries(page: Int): List<Movie> =
-        apisService.getTvShows(page).results.map {
-            movieRemoteMapper.to(it)
-        }
+    override suspend fun getPopularMovies(page: Int): MoviesResponse =
+        moviesRemoteDateSource.getPopularMovies(page)
 
 
-    override suspend fun getTopRatedMovies(page: Int): List<Movie> =
-        apisService.getTopRatedMovies(page = page).results.map {
-            movieRemoteMapper.to(it)
-        }
+    override suspend fun getTvSeries(page: Int): MoviesResponse =
+        moviesRemoteDateSource.getTvSeries(page)
 
 
-    override suspend fun searchMovie(query: String, page: Int): List<Movie> =
-        apisService.searchMovie(query, page).results.map {
-            movieRemoteMapper.to(it)
-        }
+    override suspend fun getTopRatedMovies(page: Int): MoviesResponse =
+        moviesRemoteDateSource.getTopRatedMovies(page)
+
+
+    override suspend fun searchMovie(query: String, page: Int): MoviesResponse =
+        moviesRemoteDateSource.searchMovie(query, page)
+
 
 }
