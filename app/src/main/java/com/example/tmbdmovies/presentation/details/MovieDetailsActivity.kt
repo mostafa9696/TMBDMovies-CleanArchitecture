@@ -19,12 +19,11 @@ import com.example.tmbdmovies.data.Constants.YOUTUBE_VIDEO_URL
 import com.example.tmbdmovies.databinding.ActivityMovieDetailsBinding
 import com.example.tmbdmovies.databinding.ItemMovieGenreBinding
 import com.example.tmbdmovies.presentation.extensions.hide
-import com.example.tmbdmovies.presentation.extensions.remove
+import com.example.tmbdmovies.presentation.extensions.show
 import com.example.tmbdmovies.presentation.model.MovieCastPresentation
 import com.example.tmbdmovies.presentation.model.MoviePresentation
 import com.example.tmbdmovies.presentation.model.MovieTrailerPresentation
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -66,6 +65,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                 launch {
                     viewModel.movieCastStateFlow.collect {
                         when (it) {
+                            is Resource.Loading -> binding.castShimmer.show()
                             is Resource.Success -> setMovieCast(it.data)
                             is Resource.Error -> Toast.makeText(
                                 this@MovieDetailsActivity,
@@ -79,6 +79,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                 launch {
                     viewModel.movieTrailersStateFlow.collect {
                         when (it) {
+                            is Resource.Loading -> binding.trailerShimmer.show()
                             is Resource.Success -> setMovieTrailers(it.data)
                             is Resource.Error -> Toast.makeText(
                                 this@MovieDetailsActivity,
@@ -143,6 +144,7 @@ class MovieDetailsActivity : AppCompatActivity() {
     }
 
     private fun setMovieTrailers(movieTrailers: List<MovieTrailerPresentation>?) {
+        binding.trailerShimmer.hide()
         if (movieTrailers.isNullOrEmpty())
             binding.trailersGroup.hide()
         else {
@@ -155,6 +157,7 @@ class MovieDetailsActivity : AppCompatActivity() {
     }
 
     private fun setMovieCast(movieCast: List<MovieCastPresentation>?) {
+        binding.castShimmer.hide()
         if (movieCast.isNullOrEmpty()) {
             binding.movieCastGroup.hide()
         } else {

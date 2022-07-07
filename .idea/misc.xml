@@ -6,17 +6,19 @@
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/drawable-v24/nav_item_color_state.xml" value="0.1455" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/drawable/circular_rating_progress_bar.xml" value="0.1375" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/activity_main.xml" value="0.1796875" />
-        <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/activity_movie_details.xml" value="0.12" />
+        <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/activity_movie_details.xml" value="0.1" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/activity_movies.xml" value="0.22" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/fragment_popular.xml" value="0.1796875" />
-        <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/fragment_top_rated.xml" value="0.1796875" />
+        <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/fragment_top_rated.xml" value="0.14666666666666667" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/fragment_tv_series.xml" value="0.1796875" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/item_movie.xml" value="0.22" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/item_movie_cast.xml" value="0.16770833333333332" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/item_movie_genre.xml" value="0.16770833333333332" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/item_movie_header_footer.xml" value="0.16770833333333332" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/item_movie_trailer.xml" value="0.16770833333333332" />
+        <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/item_shimmer.xml" value="0.16770833333333332" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/movie_item.xml" value="0.1796875" />
+        <entry key="..\:/projects/TMBDMovies/app/src/main/res/layout/no_internet_view.xml" value="0.16770833333333332" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/menu/menu.xml" value="0.1796875" />
         <entry key="..\:/projects/TMBDMovies/app/src/main/res/xml/activity_details_scene.xml" value="0.16770833333333332" />
       </map>

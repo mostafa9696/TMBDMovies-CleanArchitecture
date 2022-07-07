@@ -12,12 +12,12 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="250dp"
+        android:background="@color/colorPrimary"
         android:elevation="0dp"
         app:elevation="0dp"
-        android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <com.google.android.material.imageview.ShapeableImageView
@@ -85,8 +85,8 @@
                 android:id="@+id/genre_chip_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:chipSpacingVertical="0dp"
                 app:chipMinTouchTargetSize="0dp"
+                app:chipSpacingVertical="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -95,12 +95,12 @@
                 android:id="@+id/release_date_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:gravity="center"
                 android:layout_marginTop="16dp"
                 android:drawableStart="@drawable/ic_calendar"
-                android:drawableTint="@color/white"
                 android:drawablePadding="4dp"
+                android:drawableTint="@color/white"
+                android:gravity="center"
+                android:textSize="12sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/genre_chip_group"
                 tools:text="Released on 15 November, 2020" />
@@ -141,14 +141,47 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/trailers_tv"
+                tools:listitem="@layout/item_movie_trailer"
                 tools:visibility="visible" />
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/trailer_shimmer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/trailers_tv"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal"
+                   >
+
+                    <include layout="@layout/item_shimmer" />
+
+                    <include layout="@layout/item_shimmer" />
+
+                    <include layout="@layout/item_shimmer" />
+
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <androidx.constraintlayout.widget.Group
+                android:id="@+id/trailers_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/trailers_group"
-                app:constraint_referenced_ids="trailers_rv, trailers_tv"
-                />
+                app:constraint_referenced_ids="trailers_rv, trailers_tv" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/trailer_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="trailer_shimmer,trailers_rv" />
 
             <TextView
                 android:id="@+id/tv_cast"
@@ -163,7 +196,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/trailers_rv"
+                app:layout_constraintTop_toBottomOf="@id/trailer_barrier"
                 app:layout_constraintVertical_bias="0.0" />
 
 
@@ -182,12 +215,36 @@
                 app:layout_constraintVertical_bias="0.0"
                 tools:listitem="@layout/item_movie_cast" />
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/cast_shimmer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_cast">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/item_shimmer" />
+
+                    <include layout="@layout/item_shimmer" />
+
+                    <include layout="@layout/item_shimmer" />
+
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
             <androidx.constraintlayout.widget.Group
+                android:id="@+id/movie_cast_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/movie_cast_group"
-                app:constraint_referenced_ids="tv_cast, movie_cast_recycler_view"
-                />
+                app:constraint_referenced_ids="tv_cast, movie_cast_recycler_view" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -246,15 +303,5 @@
 
         </RelativeLayout>
     </com.google.android.material.card.MaterialCardView>
-
-    <ProgressBar
-        android:id="@+id/progress_Bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

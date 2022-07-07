@@ -1,18 +1,13 @@
 package com.example.tmbdmovies.di
 
 import com.example.tmbdmovies.common.Mapper
-import com.example.tmbdmovies.data.mappers.*
 import com.example.tmbdmovies.data.models.MovieCastResponse
 import com.example.tmbdmovies.data.models.MovieGenreResponse
 import com.example.tmbdmovies.data.models.MovieResponse
 import com.example.tmbdmovies.data.models.MovieTrailerResponse
-import com.example.tmbdmovies.domain.models.Movie
-import com.example.tmbdmovies.domain.models.MovieCast
-import com.example.tmbdmovies.domain.models.MovieGenre
-import com.example.tmbdmovies.domain.models.MovieTrailer
 import com.example.tmbdmovies.presentation.mappers.MovieCastDomainMapper
-import com.example.tmbdmovies.presentation.mappers.MovieDomainMapper
 import com.example.tmbdmovies.presentation.mappers.MovieGenreDomainMapper
+import com.example.tmbdmovies.presentation.mappers.MovieRemoteMapper
 import com.example.tmbdmovies.presentation.mappers.MovieTrailerDomainMapper
 import com.example.tmbdmovies.presentation.model.MovieCastPresentation
 import com.example.tmbdmovies.presentation.model.MovieGenrePresentation
@@ -26,32 +21,17 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AppModule {
-
-    @Binds
-    abstract fun bindMovieRemoteMapper(movieRemoteMapper: MovieRemoteMapper): Mapper<MovieResponse, Movie>
-
-    @Binds
-    abstract fun bindMovieDomainMapper(movieDomainMapper: MovieDomainMapper): Mapper<Movie, MoviePresentation>
-
-    @Binds
-    abstract fun bindMovieCastRemoteMapper(movieCastsRemoteMapper: MovieCastsRemoteMapper): Mapper<MovieCastResponse, MovieCast>
-
+    
     @Binds
     abstract fun bindMovieCastDomainMapper(movieCastDomainMapper: MovieCastDomainMapper): Mapper<MovieCastResponse, MovieCastPresentation>
-
-    @Binds
-    abstract fun bindMovieTrailersRemoteMapper(movieTrailerRemoteMapper: MovieTrailerRemoteMapper): Mapper<MovieTrailerResponse, MovieTrailer>
 
     @Binds
     abstract fun bindMovieTrailersDomainMapper(movieTrailerDomainMapper: MovieTrailerDomainMapper): Mapper<MovieTrailerResponse, MovieTrailerPresentation>
 
     @Binds
-    abstract fun bindMovieGenresRemoteMapper(movieGenresRemoteMapper: MovieGenresRemoteMapper): Mapper<MovieGenreResponse, MovieGenre>
-
-    @Binds
     abstract fun bindMovieGenresDomainMapper(movieGenreDomainMapper: MovieGenreDomainMapper): Mapper<MovieGenreResponse, MovieGenrePresentation>
 
     @Binds
-    abstract fun bindMapper(movieRemoteMapper2: MovieRemoteMapper2): Mapper<MovieResponse, MoviePresentation>
+    abstract fun bindMoviesMapper(movieRemoteMapper: MovieRemoteMapper): Mapper<MovieResponse, MoviePresentation>
 
 }

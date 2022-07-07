@@ -7,10 +7,6 @@ import javax.inject.Inject
 
 class MovieDomainMapper @Inject constructor() : Mapper<Movie, MoviePresentation> {
 
-    override fun from(e: MoviePresentation): Movie {
-        throw Exception("Not supported")
-    }
-
     override fun to(t: Movie): MoviePresentation {
         return MoviePresentation(
             genreIds = t.genreIds,

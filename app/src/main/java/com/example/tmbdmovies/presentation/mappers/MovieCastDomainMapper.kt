@@ -9,10 +9,6 @@ import javax.inject.Inject
 
 class MovieCastDomainMapper @Inject constructor() : Mapper<MovieCastResponse, MovieCastPresentation> {
 
-    override fun from(e: MovieCastPresentation): MovieCastResponse {
-        throw Exception("Not supported")
-    }
-
     override fun to(t: MovieCastResponse): MovieCastPresentation {
         return MovieCastPresentation(
             profileImageUrl = t.profile_path,

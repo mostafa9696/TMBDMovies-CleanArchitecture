@@ -1,10 +1,11 @@
 package com.example.tmbdmovies.presentation.movies
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +18,7 @@ import com.example.tmbdmovies.presentation.extensions.onStates
 import com.example.tmbdmovies.presentation.extensions.show
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import java.net.UnknownHostException
 
 @AndroidEntryPoint
 abstract class BaseMoviesFragment(private val query: String) : Fragment() {
@@ -47,6 +49,8 @@ abstract class BaseMoviesFragment(private val query: String) : Fragment() {
 
     abstract fun getMoviesRv(): RecyclerView
     abstract fun getProgressLoading(): ProgressBar
+    abstract fun getNoInternetView(): ConstraintLayout
+    abstract fun getRetryButton(): Button
 
     private fun initMoviesRv() {
 
@@ -65,18 +69,18 @@ abstract class BaseMoviesFragment(private val query: String) : Fragment() {
             hasHeader = false,
             onInitialLoading = {
                 getProgressLoading().show()
-                Log.d("bb0", "onInitialLoading: ")
             },
             onInitialEmpty = {
-                Log.d("bb0", "onInitialEmpty: ")
             },
             onInitialError = {  // todo handle general error and network error
-                Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
+                if (it is UnknownHostException)
+                    getNoInternetView().show()
+                else
+                    Toast.makeText(activity, it.message, Toast.LENGTH_LONG).show()
                 getProgressLoading().hide()
-                Log.d("bb0", "onInitialError: ")
             }
         ) {
-            Log.d("bb0", "Load new pager: ")
+            getNoInternetView().hide()
             getProgressLoading().hide()
         }
 
@@ -85,6 +89,10 @@ abstract class BaseMoviesFragment(private val query: String) : Fragment() {
                 return if (position == adapter.itemCount) 2 else 1
             }
 
+        }
+
+        getRetryButton().setOnClickListener {
+            viewModel.getMovies(query + "1")
         }
     }
 }

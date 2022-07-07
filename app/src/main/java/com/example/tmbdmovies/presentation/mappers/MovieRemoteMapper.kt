@@ -1,16 +1,11 @@
-package com.example.tmbdmovies.data.mappers
+package com.example.tmbdmovies.presentation.mappers
 
 import com.example.tmbdmovies.common.Mapper
 import com.example.tmbdmovies.data.models.MovieResponse
-import com.example.tmbdmovies.domain.models.Movie
 import com.example.tmbdmovies.presentation.model.MoviePresentation
 import javax.inject.Inject
 
-class MovieRemoteMapper2 @Inject constructor(): Mapper<MovieResponse, MoviePresentation> {
-
-    override fun from(e: MoviePresentation): MovieResponse {
-        throw Exception("Not supported")
-    }
+class MovieRemoteMapper @Inject constructor(): Mapper<MovieResponse, MoviePresentation> {
 
     override fun to(t: MovieResponse): MoviePresentation {
         return MoviePresentation(

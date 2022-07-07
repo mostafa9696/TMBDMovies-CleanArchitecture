@@ -23,4 +23,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         />
+
+    <include
+        android:id="@+id/no_internet_container"
+        layout="@layout/no_internet_view"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
