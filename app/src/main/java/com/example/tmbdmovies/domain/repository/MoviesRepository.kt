@@ -9,7 +9,4 @@ interface MoviesRepository {
     suspend fun getTvSeries(page: Int): MoviesResponse
 
     suspend fun getTopRatedMovies(page: Int): MoviesResponse
-
-    suspend fun searchMovie(query: String, page: Int): MoviesResponse
-
 }

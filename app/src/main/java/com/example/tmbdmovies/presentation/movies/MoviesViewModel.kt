@@ -20,12 +20,10 @@ class MoviesViewModel @Inject constructor(
     private val mapper: Mapper<MovieResponse, MoviePresentation>
 ) : ViewModel() {
 
-    //private val requestStateFlow = MutableSharedFlow<String>()
-    private val requestStateFlow = MutableStateFlow<String?>(null)
+    val requestStateFlow = MutableStateFlow<String?>(null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     var movies: Flow<PagingData<MoviePresentation>> = requestStateFlow
-       //.debounce(300)
         .filterNotNull()
         .filterNot {
             it.isEmpty()

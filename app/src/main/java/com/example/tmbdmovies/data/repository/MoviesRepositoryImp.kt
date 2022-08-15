@@ -27,8 +27,4 @@ class MoviesRepositoryImp @Inject constructor(
         moviesRemoteDateSource.getTopRatedMovies(page)
 
 
-    override suspend fun searchMovie(query: String, page: Int): MoviesResponse =
-        moviesRemoteDateSource.searchMovie(query, page)
-
-
 }

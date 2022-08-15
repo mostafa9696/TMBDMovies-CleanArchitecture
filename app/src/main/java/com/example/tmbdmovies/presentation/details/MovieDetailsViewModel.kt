@@ -15,6 +15,7 @@ import com.example.tmbdmovies.presentation.model.MovieTrailerPresentation
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,7 +32,7 @@ class MovieDetailsViewModel @Inject constructor(
     private val _movieCastStateFlow =
         MutableStateFlow<Resource<List<MovieCastPresentation>>>(Resource.Loading)
     val movieCastStateFlow: StateFlow<Resource<List<MovieCastPresentation>>> =
-        _movieCastStateFlow
+        _movieCastStateFlow.asStateFlow()
 
     private val _movieGenreStateFlow =
         MutableStateFlow<Resource<List<String>>>(Resource.Loading)
@@ -43,7 +44,6 @@ class MovieDetailsViewModel @Inject constructor(
     val movieTrailersStateFlow: StateFlow<Resource<List<MovieTrailerPresentation>>> =
         _movieTrailersStateFlow
 
-
     fun getMovieCast(movieID: Long, type: String) {
         viewModelScope.launch {
             getMovieCastUseCase(movieID, type).collect {
@@ -51,7 +51,7 @@ class MovieDetailsViewModel @Inject constructor(
                     is Resource.Loading -> _movieCastStateFlow.emit(Resource.Loading)
                     is Resource.Error -> _movieCastStateFlow.emit(Resource.Error(it.exception))
                     is Resource.Success -> _movieCastStateFlow.emit(
-                        Resource.Success
+                            Resource.Success
                             (it.data?.cast?.map { castResponse ->
                             movieCastMapper.to(castResponse)
                         })

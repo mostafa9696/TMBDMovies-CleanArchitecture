@@ -20,9 +20,6 @@ class MoviesRemoteDateSourceImp @Inject constructor(
     override suspend fun getTopRatedMovies(page: Int): MoviesResponse =
         makeRequest { apisService.getTopRatedMovies(page) }
 
-    override suspend fun searchMovie(query: String, page: Int): MoviesResponse =
-        makeRequest { apisService.searchMovie(query, page) }
-
     override suspend fun getMovieCast(movieId: Long): MovieCastsResponse =
         makeRequest { apisService.getMovieCast(movieId) }
 

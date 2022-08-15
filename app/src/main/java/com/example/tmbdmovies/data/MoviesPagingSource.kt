@@ -44,12 +44,7 @@ class MoviesPagingSource(
                     )
                 }
                 else -> {
-                    val popularMovies = moviesRepository.searchMovie(query, page).results
-                    LoadResult.Page(
-                        data = popularMovies,
-                        prevKey = null,
-                        nextKey = if (popularMovies.isEmpty()) null else page + 1
-                    )
+                   throw Exception("Unknown query")
                 }
             }
         } catch (ex: Exception) {

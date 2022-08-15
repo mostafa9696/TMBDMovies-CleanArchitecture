@@ -17,8 +17,7 @@ interface MoviesRemoteDateSource {
 
     suspend fun getTopRatedMovies(page: Int): MoviesResponse
 
-    suspend fun searchMovie(query: String, page: Int): MoviesResponse
-
+    @Throws(Exception::class)
     suspend fun getMovieCast(movieId: Long): MovieCastsResponse
 
     suspend fun getMovieTrailers(movieID: Long): MovieTrailersResponse

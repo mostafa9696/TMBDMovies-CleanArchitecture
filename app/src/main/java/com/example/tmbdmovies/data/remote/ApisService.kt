@@ -39,7 +39,7 @@ interface ApisService {
         @Path("movie_id")
         movieId: Long,
         @Query("api_key") api_key: String = BuildConfig.TMDB_API_KEY
-        ): Response<MovieTrailersResponse>
+    ): Response<MovieTrailersResponse>
 
     @GET("tv/{tv_id}/videos")
     suspend fun getTvTrailers(
@@ -65,12 +65,5 @@ interface ApisService {
         @Path("tv_id") tvId: Long,
         @Query("api_key") clientId: String = BuildConfig.TMDB_API_KEY
     ): Response<MovieCastsResponse>
-
-    @GET("search/movie")
-    suspend fun searchMovie(
-        @Query("query") query: String,
-        @Query("page") page: Int,
-        @Query("api_key") clientId: String = BuildConfig.TMDB_API_KEY
-    ): Response<MoviesResponse>
 
 }
